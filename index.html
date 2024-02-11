@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChartEase</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    /* Custom CSS */
+    body {
+      background-color: #f0f3ea;
+    }
+    .form-group label {
+      font-weight: bold;
+    }
+    .notes-section {
+      margin-top: 2rem;
+    }
+    .form-group {
+      margin-bottom: 1.0rem; 
+    }
+    .navbar-custom {
+    background-color: #4d7679;
+    }
+    .navbar-brand {
+      color: white;
+    }
+    .btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
+    background-color: #4d7679 !important;
+    }
+  </style>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-custom">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <img src="https://github.com/ChartEase/.github/blob/main/image.png?raw=true" alt="" width="30" height="30" class="d-inline-block align-text-top">
+      ChartEase
+    </a>
+    <button id="submit" type="button" class="btn btn-outline-light">New Patient + </button>
+  </div>
+</nav>
+
+  <div class="container mt-5">
+    <h4>Patient Information</h4>
+    <div class="row">
+      <div class="col-md-6">
+        <form>
+          <!-- Patient Information -->
+          <div class="form-group">
+            <label for="patientName">Patient Name</label>
+            <input type="text" class="form-control" id="name" placeholder="Jane Doe" tabindex="1">
+          </div>
+          <div class="form-group">
+            <label for="patientAddress">Patient Address</label>
+            <input type="text" class="form-control" id="address" placeholder="766 8th St Birmingham, Alabama 35213" tabindex="1">
+          </div>
+          <div class="form-group">
+            <label for="patientDOB">Date of Birth</label>
+            <input type="date" class="form-control" id="birthdate" tabindex="2">
+          </div>
+          <div class="form-group">
+            <label for="reasonForVisit">Reason for Visit</label>
+            <input type="text" class="form-control" id="reason" placeholder="e.g. Assessment, Lab Draw, Wound Care" tabindex="1">
+          </div>
+          <div class="form-group">
+            <label for="symptoms">Reported Symptoms</label>
+            <input type="text" class="form-control" id="symptoms" placeholder="e.g. Dizziness, Loss of Taste, Headache" tabindex="1">
+          </div>
+
+          
+
+          <!-- Vital Signs -->
+          <h4>Vital Signs</h4>
+          <div class="form-row">
+            <div class="form-group col-md-4">
+              <label for="temperature">Temperature</label>
+              <input type="number" class="form-control" id="temperature" tabindex="3">
+            </div>
+            <div class="form-group col-md-4">
+              <label for="bloodPressure">Blood Pressure</label>
+              <input type="text" class="form-control" id="bloodPressure" placeholder="e.g. 120/80" tabindex="4">
+            </div>
+            <div class="form-group col-md-4">
+              <label for="heartRate">Heart Rate</label>
+              <input type="number" class="form-control" id="heartRate" tabindex="5">
+            </div>
+          </div>
+
+          <!-- Medical History -->
+          <h4>Medical History</h4>
+          <div class="form-group">
+            <label for="allergies">Allergies</label>
+            <textarea class="form-control" id="allergies" rows="3" tabindex="6"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="medications">Current Medications</label>
+            <textarea class="form-control" id="medications" rows="3" tabindex="7"></textarea>
+          </div>
+        </form>
+
+        <!-- Req Treatment-->
+        <div id="reqTreatmentDiv">
+            <h4 id="reqTreatmentHeader">Wound Treatments</h4>
+            <div class="form-group">
+                <label for="reqTreatments">Performed Treatment</label>
+                <textarea class="form-control" id="reqTreatments" rows="3" tabindex="6"></textarea>
+                </div>
+            </div>
+        </div>
+
+
+      <!-- Notes Section -->
+      <div class="col-md-6 notes-section">
+        <div class="form-group">
+          <label for="notes">Alerts</label>
+          <textarea class="form-control" id="alerts" rows="2" tabindex="8" readonly style="resize: none;">No Alerts to Show Yet</textarea>
+        </div>
+        <div class="form-group">
+          <div class="notes-container">
+            <label for="notes">Notes</label><br>
+            <button type="button" class="btn btn-primary" tabindex="10">New Voice Note</button>
+            <textarea class="form-control" id="notes" rows="8" tabindex="9"></textarea>
+          </div>
+        </div>        
+      </div>
+    </div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <!-- Show/hide DIV reqTreatmentDIV based on what is entered in reasonForVisit textbox-->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Get the reasonForVisit input field
+      var reasonForVisitInput = document.getElementById("reason");
+      // Get the reqTreatmentDiv
+      var reqTreatmentDiv = document.getElementById("reqTreatmentDiv");
+      var reqTreatmentHeader = document.getElementById("reqTreatmentHeader");
+      var formControls = document.getElementsByClassName("form-control");
+      var submit = document.getElementById("submit");
+  
+      // Function to check if the string contains the word "wound" case-insensitively
+      function containsReqTreatment(text) {
+        const reqTreatmentsArray = ["wound", "wound care", "allergy", "allergies", "gastrointestinal", "hypertension"];
+        if (reqTreatmentsArray.includes(text.toLowerCase())) {
+            reqTreatmentHeader.textContent = text[0].toUpperCase() + text.substring(1) + " Treatments"
+        }
+        return reqTreatmentsArray.includes(text.toLowerCase());         
+      }
+  
+      // Function to show or hide the reqTreatmentDiv based on the input value
+      function toggleReqTreatmentDiv() {
+        if (containsReqTreatment(reasonForVisitInput.value)) {
+          reqTreatmentDiv.style.display = "block";
+        } else {
+          reqTreatmentDiv.style.display = "none";
+        }
+      }
+
+      // Function to handle form change event
+      async function handleFormSubmit(e, type) {
+        let formData = new FormData();
+        for (let i = 0; i < formControls.length; i++) {
+            let input = formControls[i];
+            formData.append(input.id, input.value);
+        }
+        await fetch('http://localhost:3000/api/patients', {
+            method: "POST",
+            body: formData,
+            mode: "no-cors"
+        })
+      }
+
+      // Initial check on page load
+      reasonForVisitInput.addEventListener("input", toggleReqTreatmentDiv);
+      submit.addEventListener("click", function(e) {
+        e.preventDefault();
+        handleFormSubmit();
+      });
+      toggleReqTreatmentDiv();
+    });
+  </script>
+   
+</body>
+</html>

@@ -47,4 +47,16 @@ router.put('/:id', async (req, res, next) => {
     }
 });
 
+//Delete patient by id
+router.delete('/:id', async (req, res, next) => {
+    try {
+        const patient = await Patient.findByPk(req.params.id);
+        await patient.destroy();
+        res.sendStatus(204);
+    } catch (error) {
+        console.error('Error deleting patient', error);
+        next(error);
+    }
+});
+
 module.exports = router;

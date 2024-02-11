@@ -7,17 +7,16 @@ const Patient = db.define('Patient', {
         primaryKey: true,
         autoIncrement: true,
     },
-    firstName: {
+    name: {
         type: Sequelize.STRING,
-        allowNull: false,
+        // allowNull: false,
     },
-    lastName: {
+    address: {
         type: Sequelize.STRING,
-        allowNull: false,
     },
     birthdate: {
         type: Sequelize.DATE,
-        allowNull: false,
+        // allowNull: false,
     },
     reason: {
         type: Sequelize.STRING,
@@ -31,11 +30,8 @@ const Patient = db.define('Patient', {
     temperature: {
         type: Sequelize.DOUBLE,
     },
-    bloodPressureS: {
-        type: Sequelize.INTEGER,
-    },
-    bloodPressureD: {
-        type: Sequelize.INTEGER,
+    bloodPressure: {
+        type: Sequelize.STRING,
     },
     heartRate: {
         type: Sequelize.INTEGER,
@@ -44,9 +40,6 @@ const Patient = db.define('Patient', {
         type: Sequelize.ARRAY(Sequelize.STRING),
     },
     medications: {
-        type: Sequelize.ARRAY(Sequelize.STRING),
-    },
-    alerts: {
         type: Sequelize.ARRAY(Sequelize.STRING),
     },
     notes: {
