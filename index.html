@@ -58,7 +58,7 @@
           </div>
           <div class="form-group">
             <label for="patientDOB">Date of Birth</label>
-            <input type="date" class="form-control" id="birthdate" tabindex="2">
+            <input type="date" class="form-control" id="birth" tabindex="2">
           </div>
           <div class="form-group">
             <label for="reasonForVisit">Reason for Visit</label>
@@ -151,6 +151,14 @@
         }
         return reqTreatmentsArray.includes(text.toLowerCase());         
       }
+
+      function resetFormControls() {
+        for (let i = 0; i < formControls.length; i++) {
+          let input = formControls[i];
+          input.value = "";
+          input.textContent = "";
+        }
+      }
   
       // Function to show or hide the reqTreatmentDiv based on the input value
       function toggleReqTreatmentDiv() {
@@ -168,7 +176,6 @@
             let input = formControls[i];
             data[input.id] = input.value;
         }
-        console.log(data);
         await fetch('http://localhost:3000/api/patients', {
             method: "POST",
             body: JSON.stringify(data),
@@ -176,15 +183,27 @@
                 "Content-Type": "application/json"
             }
         })
+        resetFormControls();
       }
 
       newVoiceNoteButton.onclick = async () => {
         const res = await fetch('http://localhost:3000/api/transcribe');
-        const data = await res.json();      
-        console.log(data);
+        const data = await res.json();           
+        const recent = data.split(" ");
+
+        for (let i = 0; i < formControls.length; i++) {
+            let input = formControls[i];
+            if (recent.includes(input.id)) {
+                const index = recent.indexOf(input.id);
+                const textContent = recent.splice(index + 1).toString().replace(/,/g, " ");
+                formControls[i].value = textContent;
+                formControls[i].textContent = textContent;
+                return toggleReqTreatmentDiv(formControls[i].value);
+            }
+        }
       }
 
-
+      
       // Initial check on page load
       reasonForVisitInput.addEventListener("input", toggleReqTreatmentDiv);
       submit.addEventListener("click", function(e) {

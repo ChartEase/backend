@@ -91,18 +91,18 @@ var micInstance = mic({
 
 var micInputStream = micInstance.getAudioStream();
 
-let transcript = [];
+let transcript = "";
 
 micInputStream.on('data', data => {
   if (rec.acceptWaveform(data)) {
-    transcript.push(rec.result().text);
+    transcript += rec.result().text;
   } 
 });
 
 app.get('/api/transcribe', (req, res) => {
   console.log('in api/transcribe');
-  console.log(transcript);
   res.json(transcript);
+  transcript = "";
 })
 
 

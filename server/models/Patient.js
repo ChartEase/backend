@@ -14,7 +14,7 @@ const Patient = db.define('Patient', {
     address: {
         type: Sequelize.STRING,
     },
-    birthdate: {
+    birth: {
         type: Sequelize.DATE,
         // allowNull: false,
     },
