@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ChartEase</title>
+  <title>Kair</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <style>
     /* Custom CSS */
@@ -35,8 +35,8 @@
 <nav class="navbar navbar-custom">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">
-      <img src="https://github.com/ChartEase/.github/blob/main/image.png?raw=true" alt="" width="30" height="30" class="d-inline-block align-text-top">
-      ChartEase
+      <img src="https://avatars.githubusercontent.com/u/159643047?s=96&v=4" alt="" width="30" height="30" class="d-inline-block align-text-top">
+      Kair
     </a>
     <button id="submit" type="button" class="btn btn-outline-light">New Patient + </button>
   </div>
@@ -120,7 +120,7 @@
         <div class="form-group">
           <div class="notes-container">
             <label for="notes">Notes</label><br>
-            <button type="button" class="btn btn-primary" tabindex="10">New Voice Note</button>
+            <button type="button" id="voice" class="btn btn-primary" tabindex="10">New Voice Note</button>
             <textarea class="form-control" id="notes" rows="8" tabindex="9"></textarea>
           </div>
         </div>        
@@ -135,12 +135,13 @@
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       // Get the reasonForVisit input field
-      var reasonForVisitInput = document.getElementById("reason");
+      let reasonForVisitInput = document.getElementById("reason");
       // Get the reqTreatmentDiv
-      var reqTreatmentDiv = document.getElementById("reqTreatmentDiv");
-      var reqTreatmentHeader = document.getElementById("reqTreatmentHeader");
-      var formControls = document.getElementsByClassName("form-control");
-      var submit = document.getElementById("submit");
+      let reqTreatmentDiv = document.getElementById("reqTreatmentDiv");
+      let reqTreatmentHeader = document.getElementById("reqTreatmentHeader");
+      let formControls = document.getElementsByClassName("form-control");
+      let submit = document.getElementById("submit");
+      let newVoiceNoteButton = document.getElementById("voice");
   
       // Function to check if the string contains the word "wound" case-insensitively
       function containsReqTreatment(text) {
@@ -162,17 +163,27 @@
 
       // Function to handle form change event
       async function handleFormSubmit(e, type) {
-        let formData = new FormData();
+        const data = {};
         for (let i = 0; i < formControls.length; i++) {
             let input = formControls[i];
-            formData.append(input.id, input.value);
+            data[input.id] = input.value;
         }
+        console.log(data);
         await fetch('http://localhost:3000/api/patients', {
             method: "POST",
-            body: formData,
-            mode: "no-cors"
+            body: JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json"
+            }
         })
       }
+
+      newVoiceNoteButton.onclick = async () => {
+        const res = await fetch('http://localhost:3000/api/transcribe');
+        const data = await res.json();      
+        console.log(data);
+      }
+
 
       // Initial check on page load
       reasonForVisitInput.addEventListener("input", toggleReqTreatmentDiv);

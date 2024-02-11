@@ -6,7 +6,9 @@ const db = require('./db/db');
 const PORT = process.env.PORT || 3000;
 const app = express();
 module.exports = app;
-const axios = require('axios');
+const cors = require('cors')
+
+app.use(cors());
 
 const createApp = () => {
   // Middleware
@@ -45,7 +47,7 @@ const syncDb = () => {
   db.authenticate()
     .then(() => {
       console.log("Connection has been established");
-      db.sync()
+      db.sync({force: true})
         .then(() => {
           console.log('Database has been synced');
         });
@@ -89,12 +91,20 @@ var micInstance = mic({
 
 var micInputStream = micInstance.getAudioStream();
 
+let transcript = [];
 
 micInputStream.on('data', data => {
   if (rec.acceptWaveform(data)) {
-    console.log(rec.result());
+    transcript.push(rec.result().text);
   } 
 });
+
+app.get('/api/transcribe', (req, res) => {
+  console.log('in api/transcribe');
+  console.log(transcript);
+  res.json(transcript);
+})
+
 
 micInputStream.on('audioProcessExitComplete', function() {
     rec.free();

@@ -16,6 +16,7 @@ router.get('/', async (req, res, next) => {
 // Create a patient
 router.post('/', async (req, res, next) => {
     try {
+        console.log('reqbody', typeof(req.body));
         const newPatient = await Patient.create(req.body);
         res.json(newPatient);
     } catch (error) {

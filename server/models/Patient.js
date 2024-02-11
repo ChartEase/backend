@@ -22,25 +22,25 @@ const Patient = db.define('Patient', {
         type: Sequelize.STRING,
     },
     symptoms: {
-        type: Sequelize.ARRAY(Sequelize.STRING),
+        type: Sequelize.STRING
     },
     treatment: {
         type: Sequelize.TEXT,
     },
     temperature: {
-        type: Sequelize.DOUBLE,
+        type: Sequelize.STRING
     },
     bloodPressure: {
         type: Sequelize.STRING,
     },
     heartRate: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
     },
     allergies: {
-        type: Sequelize.ARRAY(Sequelize.STRING),
+        type: Sequelize.STRING,
     },
     medications: {
-        type: Sequelize.ARRAY(Sequelize.STRING),
+        type: Sequelize.STRING,
     },
     notes: {
         type: Sequelize.TEXT,
