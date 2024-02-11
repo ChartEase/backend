@@ -28,7 +28,7 @@ const Patient = db.define('Patient', {
         type: Sequelize.TEXT,
     },
     temperature: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER,
     },
     bloodPressure: {
         type: Sequelize.STRING,

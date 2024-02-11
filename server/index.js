@@ -96,7 +96,7 @@ let transcript = "";
 micInputStream.on('data', data => {
   if (rec.acceptWaveform(data)) {
     transcript += rec.result().text;
-  } 
+  };
 });
 
 app.get('/api/transcribe', (req, res) => {

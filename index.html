@@ -101,11 +101,11 @@
         </form>
 
         <!-- Req Treatment-->
-        <div id="reqTreatmentDiv">
-            <h4 id="reqTreatmentHeader">Wound Treatments</h4>
+        <div id="treatmentDiv">
+            <h4 id="treatmentHeader">Wound Treatments</h4>
             <div class="form-group">
-                <label for="reqTreatments">Performed Treatment</label>
-                <textarea class="form-control" id="reqTreatments" rows="3" tabindex="6"></textarea>
+                <label for="treatments">Performed Treatment</label>
+                <textarea class="form-control" id="treatments" rows="3" tabindex="6"></textarea>
                 </div>
             </div>
         </div>
@@ -131,25 +131,25 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  <!-- Show/hide DIV reqTreatmentDIV based on what is entered in reasonForVisit textbox-->
+  <!-- Show/hide DIV treatmentDIV based on what is entered in reasonForVisit textbox-->
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       // Get the reasonForVisit input field
       let reasonForVisitInput = document.getElementById("reason");
-      // Get the reqTreatmentDiv
-      let reqTreatmentDiv = document.getElementById("reqTreatmentDiv");
-      let reqTreatmentHeader = document.getElementById("reqTreatmentHeader");
+      // Get the treatmentDiv
+      let treatmentDiv = document.getElementById("treatmentDiv");
+      let treatmentHeader = document.getElementById("treatmentHeader");
       let formControls = document.getElementsByClassName("form-control");
       let submit = document.getElementById("submit");
       let newVoiceNoteButton = document.getElementById("voice");
   
       // Function to check if the string contains the word "wound" case-insensitively
-      function containsReqTreatment(text) {
-        const reqTreatmentsArray = ["wound", "wound care", "allergy", "allergies", "gastrointestinal", "hypertension"];
-        if (reqTreatmentsArray.includes(text.toLowerCase())) {
-            reqTreatmentHeader.textContent = text[0].toUpperCase() + text.substring(1) + " Treatments"
+      function containstreatment(text) {
+        const treatmentsArray = ["wound", "wound care", "allergy", "allergies", "gastrointestinal", "hypertension"];
+        if (treatmentsArray.includes(text.toLowerCase())) {
+            treatmentHeader.textContent = text[0].toUpperCase() + text.substring(1) + " Treatments"
         }
-        return reqTreatmentsArray.includes(text.toLowerCase());         
+        return treatmentsArray.includes(text.toLowerCase());         
       }
 
       function resetFormControls() {
@@ -160,13 +160,25 @@
         }
       }
   
-      // Function to show or hide the reqTreatmentDiv based on the input value
-      function toggleReqTreatmentDiv() {
-        if (containsReqTreatment(reasonForVisitInput.value)) {
-          reqTreatmentDiv.style.display = "block";
+      // Function to show or hide the treatmentDiv based on the input value
+      function toggletreatmentDiv() {
+        if (containstreatment(reasonForVisitInput.value)) {
+          treatmentDiv.style.display = "block";
         } else {
-          reqTreatmentDiv.style.display = "none";
+          treatmentDiv.style.display = "none";
         }
+      }
+
+      function wordsToNumbers(word) {
+        const numbers = {
+          'one': 1,
+          'two': 2,
+          'three': 3,
+          'four': 4,
+          'five': 5,
+          'twenty three': 23
+        };
+        return numbers[word.toLowerCase()];
       }
 
       // Function to handle form change event
@@ -195,22 +207,26 @@
             let input = formControls[i];
             if (recent.includes(input.id)) {
                 const index = recent.indexOf(input.id);
-                const textContent = recent.splice(index + 1).toString().replace(/,/g, " ");
+                let textContent = recent.splice(index + 1).toString().replace(/,/g, " ");
+                if (input.type == 'number') {
+                    textContent = wordsToNumbers(textContent);
+                    console.log(textContent);
+                }
                 formControls[i].value = textContent;
                 formControls[i].textContent = textContent;
-                return toggleReqTreatmentDiv(formControls[i].value);
+                return toggletreatmentDiv(formControls[i].value);
             }
         }
       }
 
       
       // Initial check on page load
-      reasonForVisitInput.addEventListener("input", toggleReqTreatmentDiv);
+      reasonForVisitInput.addEventListener("input", toggletreatmentDiv);
       submit.addEventListener("click", function(e) {
         e.preventDefault();
         handleFormSubmit();
       });
-      toggleReqTreatmentDiv();
+      toggletreatmentDiv();
     });
   </script>
    
